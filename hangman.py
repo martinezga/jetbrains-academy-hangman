@@ -7,28 +7,31 @@ def get_word():
     return word
 
 
-def get_hint(word):
-    hint = word[:3]
-    for i in range(3, len(word)):
-        hint = hint + '-'
-    return hint
-
-
-def validate_word(word, user_word):
-    if user_word == word:
-        print('You survived!')
-        return 1
-    else:
-        print('You lost!')
-        return 0
+def validate_letter(hint, word, letter):
+    hint = list(hint)
+    flag = 0
+    for i in range(len(word)):
+        if letter == word[i]:
+            flag = flag + 1
+            hint[i] = letter
+    if flag == 0:
+        print("That letter doesn't appear in the word")
+    hint_str = ''
+    for letter in hint:
+        hint_str += letter
+    return hint_str
 
 
 def main():
     random_word = get_word()
-    hint = get_hint(random_word)
+    hint = '-' * len(random_word)
     print('H A N G M A N')
-    user_word = input('Guess the word ' + hint + ': ')
-    validate_word(random_word, user_word)
+    for i in range(8):
+        print('\n' + hint)
+        user_letter = input('Input a letter: ')
+        hint = validate_letter(hint, random_word, user_letter)
+    print('\nThanks for playing!')
+    print("We'll see how well you did in the next stage")
 
 
 main()
