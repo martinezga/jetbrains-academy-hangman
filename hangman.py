@@ -1,37 +1,57 @@
 import random
 
 
-def get_word():
-    words = 'python', 'java', 'kotlin', 'javascript'
-    word = words[random.randrange(len(words))]
-    return word
+class HangmanGame:
+    def __init__(self):
+        self.game_words = 'python', 'java', 'kotlin', 'javascript'
+        self.random_word = ''
+        self.hint = ''
+        self.lives = 7
 
+    def get_word(self):
+        self.random_word = self.game_words[random.randrange(len(self.game_words))]
+        self.hint = '-' * len(self.random_word)
 
-def validate_letter(hint, word, letter):
-    hint = list(hint)
-    flag = 0
-    for i in range(len(word)):
-        if letter == word[i]:
-            flag = flag + 1
-            hint[i] = letter
-    if flag == 0:
-        print("That letter doesn't appear in the word")
-    hint_str = ''
-    for letter in hint:
-        hint_str += letter
-    return hint_str
+    def check_input(self, user_input):
+        hint = list(self.hint)
+        flag = 0
+        for i in range(len(self.random_word)):
+            if (user_input == self.hint[i]) and (user_input != '-'):
+                self.count_lives(-1)
+                flag = flag + 1
+                print('No improvements')
+                break
+            if user_input == self.random_word[i]:
+                flag = flag + 1
+                hint[i] = user_input
+        if flag == 0:
+            self.count_lives(-1)
+            print("That letter doesn't appear in the word")
+        hint_str = ''
+        for letter in hint:
+            hint_str += letter
+        self.hint = hint_str
+        if self.hint == self.random_word:
+            self.lives = -1
+            print('\n' + self.hint)
+            print('You guessed the word!')
+            print('You survived!')
+
+    def count_lives(self, number):
+        self.lives += number
+        if self.lives < 0:
+            print('You lost!')
 
 
 def main():
-    random_word = get_word()
-    hint = '-' * len(random_word)
+    game = HangmanGame()
+    game.get_word()
     print('H A N G M A N')
-    for i in range(8):
-        print('\n' + hint)
+    while game.lives >= 0:
+        print('\n' + game.hint)
         user_letter = input('Input a letter: ')
-        hint = validate_letter(hint, random_word, user_letter)
-    print('\nThanks for playing!')
-    print("We'll see how well you did in the next stage")
+        game.check_input(user_letter)
 
 
 main()
+
