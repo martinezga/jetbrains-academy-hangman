@@ -71,11 +71,14 @@ def main():
     game = HangmanGame()
     game.get_word()
     print('H A N G M A N')
-    while game.lives > 0:
-        print('\n' + game.hint)
-        user_letter = input('Input a letter: ')
-        if game.catch_errors(user_letter) != -1:
-            game.play()
+    option = input('Type "play" to play the game, "exit" to quit: ')
+    if option != 'exit':
+        while game.lives > 0:
+            print('\n' + game.hint)
+            user_letter = input('Input a letter: ')
+            if game.catch_errors(user_letter) != -1:
+                game.play()
+        option = input('\nType "play" to play the game, "exit" to quit: ')
 
 
 main()
